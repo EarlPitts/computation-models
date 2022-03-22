@@ -17,7 +17,7 @@
             ((q0 . b) . qa)
             ((qa . b) . qa)))
 
-(define fa (make-fa 'q0 '(a a a b b b) r))
+(define fa (make-fa 'q0 '(a a a b b b a) r))
 
 (define (run fa)
   (cond ((eq? (input fa) '()) (state fa))
@@ -25,3 +25,15 @@
                      (step (state fa) (input fa) (rules fa))
                      (cdr (input fa))
                      (rules fa))))))
+
+(define (run-with-history fa)
+  (cond ((eq? (input fa) '()) (state fa))
+        (else (cons (cons (state fa)
+                          (car (input fa)))
+                    (run-with-history (make-fa
+                                        (step (state fa) (input fa) (rules fa))
+                                        (cdr (input fa))
+                                        (rules fa)))))))
+
+(run fa)
+(run-with-history fa)
